@@ -17,6 +17,6 @@ vonat.foglalas(6)
 print(vonat.vonatinfo())
 vonat.foglalas(50)'''
 
-Bemenet.beolvas("input_Egynap.txt")
-#for jarat in Bemenet.getJaratTomb():
-#    print(jarat)
+Bemenet.beolvas("input.txt")
+for jarat in Bemenet.getJaratTomb():
+    print(jarat)
