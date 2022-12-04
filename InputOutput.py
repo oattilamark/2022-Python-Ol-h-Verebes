@@ -1,92 +1,71 @@
 from Jarat import Jarat
-#ELÉG LESZ tagolva elmenteni, nem kell többdimenziós tömb
+
 class Bemenet():
+    global jaratInfoTomb
+    jaratInfoTomb = []
     global jaratTomb
-    jaratTomb = []
+    jaratTomb = [Jarat]
 
     @staticmethod
     def beolvas(fajlnev):
         try:
             with open(fajlnev, "r", encoding="utf-8") as bemenet:
+                jaratInfoTomb.clear()
+                jaratTomb.clear()
                 elsoSor = bemenet.readline()
 
-                while True:
-                    info = []       #Járatszám, Honnan, Hová
-                    r = []          # Reggel, Foglalt, Szabad
-                    d = []          # Délben, Foglalt, Szabad
-                    e = []          # Este, Foglalt, Szabad
+                #A fájl szerekezete szerint "elvágom" a # karakternél ami elkülöníti a járatok alapinformációit a lefoglalt helyek számától
+                adat = bemenet.read().split("#")
 
-                    jaratDb = 0
-                    for x in range(0,5):
-                        sor = bemenet.readline().strip()
-                        adat = sor.split(";")
-                            
-                        if (x < 4):
-                            if (len(adat) == 3):
-                                    info.append(adat)
-                            elif (len(adat) == 2):
-                                if (x == 1):
-                                        r.append(adat)
-                                elif (x == 2):
-                                        d.append(adat)
-                                elif (x == 3):
-                                        e.append(adat)
-                            elif (adat[0] == ":"):
-                                print("ÚJ NAP")
+                jaratInfo = adat[0].strip()
+                jaratInfo = jaratInfo.split()
 
-                        x += 1
+                #A járatokat eltárolom, később jól jöhet egy ilyen lista
+                jaratInfoTomb.append(jaratInfo)
 
-                        print(f"{x-1}sor {adat}")
+                jarat = adat[1].strip()
+                jarat = jarat.split()
 
-                    if not sor:
-                        break
-                    jaratTomb.append(info + r + d + e)
+                #Itt pedig megszabadítom az adatot a másik információs szövegtől, úgy hogy azt a sort (0.) nem járom be
+                #Valamint eltárolom az adatokat
+                for j in range(1, len(jarat)):
+                    #Kifutok a változónevekből :D járat a magánhangzók nélkül
+                    jrt = jarat[j].split(";")
 
-                '''for sor in bemenet:
-                    adat = sor.strip()
+                    #Mondom..
+                    ujJarat = Jarat(jrt[0], Bemenet.getHonnanByID(jrt[0]), Bemenet.getHovaByID(jrt[0]), "")
 
-                    if(adat != ":"):                                            #NAP FOLYAMATBAN
-                    
-                    #EGY ADOTT JÁRAT BLOKKJA
-                        #jarat = [["", "", ""], ["", ""], ["", ""], ["", ""]]
+                    #print(ujJarat.vonatinfo())
+                    jaratTomb.append(ujJarat)
 
-                        if(adat != "."):
-                            tomb = adat.split(";")
-                            
-                            if (len(tomb) == 3):
-                                #jarat[0]
-                                i = 0
-                                for elem in tomb:
-                                    jarat[0][i] = tomb[i]
-                                    i+=1
-
-                                #print(jarat)
-                            elif (len(tomb) == 2):
-
-                                #jarat[1],2,3
-                                #jarat[1][0] = tomb[0]
-                                #jarat[1][1] = tomb[1]
-                                line = 0
-                                szoveg = ""
-                                for elem in tomb:
-                                    if (line % 2 == 0):
-                                        szoveg = tomb
-                                    else:
-                                        szoveg = szoveg + tomb
-
-                                    print(szoveg)
-                                    line += 1
-                        else:
-                            #print(jarat)
-                            print()
-                    else:                                                       #NAP VÉGE
-                        #Listához adás
-                        jarat.clear()
-                        print()'''
         except FileNotFoundError:
             print("A megadott forrásfájl nem található")
             exit()
 
     @staticmethod
+    def getJaratInfoTomb():
+        return jaratInfoTomb
+    
+    @staticmethod
     def getJaratTomb():
         return jaratTomb
+
+    @classmethod
+    def getHonnanByID(cls, azonosito):
+        x = 0
+        for jarat in jaratInfoTomb[0]:
+            j = jarat.split(";")
+
+            if (j[0] == azonosito):
+                x = j[1]
+        return x
+
+    @classmethod
+    def getHovaByID(cls, azonosito):
+        x = 0
+        for jarat in jaratInfoTomb[0]:
+            j = jarat.split(";")
+
+            if (j[0] == azonosito):
+                x = j[2]
+        return x

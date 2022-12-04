@@ -26,7 +26,21 @@ class Jarat:
             self.szabad = 0
 
     def vonatinfo(self):
-        return f"""Indulás\t\tÉrkezés\t\tIndulási idő\tFérőhely\tFoglalt\tSzabad
-{self.indulas_hely}\t{self.erkezes_hely}\t\t{self.indulas_ido}\t\t{self.ferohely}\t\t{self.foglalt}\t{self.szabad}
-        """
-        
+        return f"{self.jaratszam:<8}{self.indulas_hely:<20}{self.erkezes_hely:<20}{self.indulas_ido:<20}{self.ferohely:<3}{self.foglalt:<3}{self.szabad:<3}"
+    
+    #jaratszam, indulas_hely, erkezes_hely, indulas_ido
+    def getJaratszam(self):
+        return self.jaratszam
+    def getHonnan(self):
+        return self.indulas_hely
+    def getHova(self):
+        return self.erkezes_hely
+    def getMikor(self):
+        return self.indulas_ido
+    def getFerohely(self):
+        return self.ferohely
+    def getFoglalt(self):
+        return self.foglalt
+    def getSzabad(self):
+        return self.szabad
+    
